@@ -3,7 +3,7 @@
 import pandas as pd
 import requests
 
-df_train = pd.read_csv('train.csv').dropna()
+df_train = pd.read_csv('train.csv').fillna(0)
 
 df_train['NOTA_FINAL'] = (3.0 * df_train['NU_NOTA_MT'] +
                           2.0 * df_train['NU_NOTA_CN'] +
