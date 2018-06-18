@@ -5,20 +5,45 @@ import requests
 
 df_train = pd.read_csv('train.csv').fillna(0)
 
-import statsmodels.api as sm
+from sklearn import linear_model
 
-x = df_train[['NU_NOTA_CN', 'NU_NOTA_LC', 'NU_NOTA_CH', 'NU_NOTA_REDACAO']]
+cols = [
+    'NU_IDADE',
+    'TP_COR_RACA',
+    'TP_ANO_CONCLUIU',
+    'TP_ESCOLA',
+    'TP_ENSINO',
+    'IN_TREINEIRO',
+    'TP_DEPENDENCIA_ADM_ESC',
+    'IN_BAIXA_VISAO',
+    'IN_CEGUEIRA',
+    'IN_SURDEZ',
+    'IN_DISLEXIA',
+    'IN_DISCALCULIA',
+    'IN_SABATISTA',
+    'IN_GESTANTE',
+    'IN_IDOSO',
+    'NU_NOTA_CN',
+    'NU_NOTA_LC',
+    'NU_NOTA_CH',
+    'NU_NOTA_REDACAO'
+]
+
+x = df_train[cols]
 y = df_train['NU_NOTA_MT']
 
-model = sm.OLS(y, x).fit()
+lm = linear_model.LinearRegression()
+model = lm.fit(x, y)
+
+# print(lm.score(x, y))
 
 df = pd.read_csv('test2.csv').fillna(0)
 
-x = df[['NU_NOTA_CN', 'NU_NOTA_LC', 'NU_NOTA_CH', 'NU_NOTA_REDACAO']]
+x = df[cols]
 
-predictions = model.predict(x)
+predictions = lm.predict(x)
 
-df['NU_NOTA_MT'] = predictions.values.reshape(-1, 1)
+df['NU_NOTA_MT'] = predictions
 
 df_answer = df[['NU_INSCRICAO', 'NU_NOTA_MT']]
 
